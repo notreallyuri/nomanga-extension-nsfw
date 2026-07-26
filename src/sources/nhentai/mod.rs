@@ -138,7 +138,7 @@ impl Source for NHentaiSource {
     }
 
     fn search(&self, query: SearchQuery) -> SourceResult<MangaPage> {
-        let mut final_query = query.query.clone();
+        let mut final_query = query.term.clone();
 
         for tag in query.filters.included("tags") {
             final_query.push_str(&format!(" \"{tag}\""));
