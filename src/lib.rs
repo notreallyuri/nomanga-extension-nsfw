@@ -10,5 +10,5 @@ nomanga_sdk::register_sources! {
         abi_version: ABI_VERSION,
         author: "Yuri".into(),
         website: None },
-    sources: [sources::nhentai::NHentaiSource],
+    sources: [sources::nhentai::NHentaiSource, sources::hitomi::HitomiSource],
 }
