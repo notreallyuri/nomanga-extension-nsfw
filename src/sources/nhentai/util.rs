@@ -135,3 +135,22 @@ pub fn format_tag_label(tag_type: &str, name: &str) -> String {
 
     format!("{prefix}: {name}")
 }
+
+pub fn apply_global_query_settings(mut query: String) -> String {
+    let lang = guest::setting_or("language", "all");
+    if lang != "all" && !lang.is_empty() {
+        query.push_str(&format!(" language:{}", lang));
+    }
+
+    let included = guest::setting_or("global_included", "");
+    if !included.is_empty() {
+        query.push_str(&format!(" {included}"));
+    }
+
+    let excluded = guest::setting_or("global_excluded", "");
+    if !excluded.is_empty() {
+        query.push_str(&format!(" {excluded}"));
+    }
+
+    query.trim().to_string()
+}

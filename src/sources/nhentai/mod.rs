@@ -37,10 +37,37 @@ impl Source for NHentaiSource {
         }
     }
 
-    fn section(&self, _section: SectionRef) -> SourceResult<MangaPage> {
-        Err(SourceError::Parse {
-            message: "Sections are not paginable".into(),
-        })
+    fn section(&self, section: SectionRef) -> SourceResult<MangaPage> {
+        let mut base_query = encode_query(&util::apply_global_query_settings(String::new()));
+
+        if base_query.trim().is_empty() {
+            base_query = "*".to_string();
+        }
+
+        let sort_param = match section.section_id.as_str() {
+            "latest" => "date",
+            "popular_today" => "popular-today",
+            "popular_week" => "popular-week",
+            "popular_month" => "popular-month",
+            "popular_all" => "popular",
+            _ => {
+                return Err(SourceError::Parse {
+                    message: "Unknown section ID".into(),
+                });
+            }
+        };
+
+        let url = format!(
+            "{API_URL}/search?query={}&sort={}&page={}",
+            base_query, sort_param, section.page
+        );
+
+        let res: api::V2SearchResponse = auth_request(&url).json()?;
+
+        let items = util::map_galleries(res.result.unwrap_or_default());
+        let has_next = (section.page as u32) < res.num_pages;
+
+        Ok(MangaPage { has_next, items })
     }
 
     fn settings(&self) -> Vec<Setting> {
@@ -48,11 +75,20 @@ impl Source for NHentaiSource {
             Setting::select(
                 "language",
                 "Preferred Language",
-                opts(&["all", "english", "japanese", "chinese"]),
+                SelectOption::list([
+                    ("all", "All"),
+                    ("english", "English"),
+                    ("japanese", "Japanese"),
+                    ("chinese", "Chinese"),
+                ]),
             )
             .with_description("Filter homepage and searches by this language."),
             Setting::secret("api_key", "API Key")
                 .with_description("Optional API Key for V2 endpoints."),
+            Setting::text("global_included", "Global Included Tags")
+                .with_description("Added to every search (e.g. \"big breasts\" sole female)"),
+            Setting::text("global_excluded", "Global Excluded Tags")
+                .with_description("Removed from every search (e.g. -guro -\"ugly bastard\")"),
         ]
     }
 
@@ -97,18 +133,32 @@ impl Source for NHentaiSource {
     }
 
     fn homepage(&self) -> SourceResult<Homepage> {
-        let base_query = encode_query(&util::apply_language_preference(String::new()));
+        let mut base_query = encode_query(&util::apply_global_query_settings(String::new()));
 
-        let latest_res: api::V2SearchResponse =
+        if base_query.trim().is_empty() {
+            base_query = "*".to_string();
+        }
+
+        let latest: api::V2SearchResponse =
             auth_request(&format!("{API_URL}/search?query={base_query}&sort=date")).json()?;
 
-        let popular_today_res: api::V2SearchResponse = auth_request(&format!(
+        let popular_today: api::V2SearchResponse = auth_request(&format!(
             "{API_URL}/search?query={base_query}&sort=popular-today"
         ))
         .json()?;
 
-        let popular_all_res: api::V2SearchResponse =
-            auth_request(&format!("{API_URL}/search?query={base_query}&sort=popular")).json()?;
+        let popular_week: api::V2SearchResponse = auth_request(&format!(
+            "{API_URL}/search?query={base_query}&sort=popular-week"
+        ))
+        .json()?;
+
+        let popular_month: api::V2SearchResponse = auth_request(&format!(
+            "{API_URL}/search?query={base_query}&sort=popular-month",
+        ))
+        .json()?;
+
+        let popular_all: api::V2SearchResponse =
+            auth_request(&format!("{API_URL}/search?query={base_query}&sort=popular",)).json()?;
 
         Ok(Homepage {
             sections: vec![
@@ -116,22 +166,36 @@ impl Source for NHentaiSource {
                     id: "latest".into(),
                     title: "Latest Updates".into(),
                     layout: SectionLayout::TripleRow,
-                    items: util::map_galleries(latest_res.result.unwrap_or_default()),
-                    paginable: false,
+                    items: util::map_galleries(latest.result.unwrap_or_default()),
+                    paginable: true,
                 },
                 HomepageSection {
                     id: "popular_today".into(),
                     title: "Popular Today".into(),
                     layout: SectionLayout::SingleRow,
-                    items: util::map_galleries(popular_today_res.result.unwrap_or_default()),
-                    paginable: false,
+                    items: util::map_galleries(popular_today.result.unwrap_or_default()),
+                    paginable: true,
                 },
                 HomepageSection {
-                    id: "popular".into(),
+                    id: "popular_week".into(),
+                    title: "Popular This Week".into(),
+                    layout: SectionLayout::SingleRow,
+                    items: util::map_galleries(popular_week.result.unwrap_or_default()),
+                    paginable: true,
+                },
+                HomepageSection {
+                    id: "popular_month".into(),
+                    title: "Popular This Month".into(),
+                    layout: SectionLayout::SingleRow,
+                    items: util::map_galleries(popular_month.result.unwrap_or_default()),
+                    paginable: true,
+                },
+                HomepageSection {
+                    id: "popular_all".into(),
                     title: "All-Time Popular".into(),
                     layout: SectionLayout::SingleRow,
-                    items: util::map_galleries(popular_all_res.result.unwrap_or_default()),
-                    paginable: false,
+                    items: util::map_galleries(popular_all.result.unwrap_or_default()),
+                    paginable: true,
                 },
             ],
         })
