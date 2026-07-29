@@ -42,6 +42,7 @@ nomanga-cli index \
 	--website "$WEBSITE" \
 	--out docs/index.min.json \
 	--json \
+	--html docs/index.html \
 	docs/*.wasm
 
 nomanga-cli index --name "$NAME" --out docs/index.json docs/*.wasm

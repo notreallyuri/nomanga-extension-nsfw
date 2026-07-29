@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>nomanga nsfw pack &mdash; nomanga extensions</title>
+<style>
+:root {
+  --bg: #fbfbfd; --fg: #16161a; --muted: #6b6b76;
+  --card: #fff; --line: #e4e4ea; --accent: #4f46e5; --code: #f2f2f6;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #121216; --fg: #ececf1; --muted: #9a9aa6;
+    --card: #1b1b21; --line: #2b2b33; --accent: #a5a0ff; --code: #23232b;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 3rem 1.25rem 5rem; background: var(--bg); color: var(--fg);
+  font: 16px/1.6 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+main { max-width: 46rem; margin: 0 auto; }
+h1 { margin: 0 0 .25rem; font-size: 1.85rem; letter-spacing: -.02em; }
+.lede { margin: 0 0 .5rem; color: var(--muted); }
+.repo { color: var(--muted); font-size: .875rem; }
+.add {
+  margin: 2rem 0 2.5rem; padding: 1.15rem 1.25rem; background: var(--card);
+  border: 1px solid var(--line); border-radius: .75rem;
+}
+.add h2 { margin: 0 0 .35rem; font-size: .8rem; text-transform: uppercase;
+  letter-spacing: .06em; color: var(--muted); }
+.add p { margin: .6rem 0 0; font-size: .875rem; color: var(--muted); }
+.row { display: flex; gap: .5rem; align-items: stretch; }
+#url {
+  flex: 1; min-width: 0; padding: .6rem .7rem; border: 1px solid var(--line);
+  border-radius: .5rem; background: var(--code); color: var(--fg);
+  font: .8125rem ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+button {
+  padding: .6rem 1rem; border: 0; border-radius: .5rem; cursor: pointer;
+  background: var(--accent); color: #fff; font-size: .875rem; font-weight: 600;
+}
+button:active { transform: translateY(1px); }
+.ext {
+  margin-bottom: 1.25rem; padding: 1.25rem; background: var(--card);
+  border: 1px solid var(--line); border-radius: .75rem;
+}
+.ext header { display: flex; flex-wrap: wrap; align-items: baseline; gap: .6rem; }
+.ext h2 { margin: 0; font-size: 1.15rem; }
+.meta { color: var(--muted); font-size: .8125rem; }
+table { width: 100%; border-collapse: collapse; margin: 1rem 0 .5rem;
+  font-size: .875rem; display: block; overflow-x: auto; }
+th { text-align: left; font-size: .75rem; text-transform: uppercase;
+  letter-spacing: .05em; color: var(--muted); font-weight: 600; }
+th, td { padding: .4rem .75rem .4rem 0; border-bottom: 1px solid var(--line);
+  white-space: nowrap; }
+code { background: var(--code); padding: .1rem .35rem; border-radius: .25rem;
+  font: .8125rem ui-monospace, SFMono-Regular, Menlo, monospace; }
+.nsfw { background: #b4243a; color: #fff; padding: .05rem .4rem;
+  border-radius: .25rem; font-size: .7rem; font-weight: 600; }
+details { margin-top: .75rem; font-size: .875rem; }
+summary { cursor: pointer; color: var(--muted); }
+.hosts { margin: .5rem 0 0; padding-left: 1.1rem; color: var(--muted);
+  font: .8125rem ui-monospace, SFMono-Regular, Menlo, monospace; }
+.download { display: inline-block; margin-top: 1rem; color: var(--accent);
+  font-size: .8125rem; text-decoration: none; }
+.download:hover { text-decoration: underline; }
+footer { margin-top: 3rem; color: var(--muted); font-size: .8125rem; }
+footer a { color: inherit; }
+</style>
+</head>
+<body>
+<main>
+  <h1>nomanga nsfw pack</h1>
+  <p class="lede">Adult source pack for nomanga. Every source here is flagged nsfw.</p>
+  <a class="repo" href="https://github.com/notreallyuri/nomanga-extension-nsfw">https://github.com/notreallyuri/nomanga-extension-nsfw</a>
+
+  <div class="add">
+    <h2>Add this repository</h2>
+    <div class="row">
+      <input id="url" readonly value="index.min.json">
+      <button id="copy" type="button">Copy</button>
+    </div>
+    <p>In nomanga, open Settings &rarr; Extensions and paste this into the
+    repository field.</p>
+  </div>
+
+  <section class="ext">
+  <header>
+    <h2>NSFW Pack</h2>
+    <span class="meta">v0.1.0 &middot; abi 5 &middot; by Yuri</span>
+  </header>
+  <table>
+    <thead><tr><th>Source</th><th>Id</th><th>Language</th><th></th></tr></thead>
+    <tbody><tr><td>nHentai (V2)</td><td><code>net.nhentai.v2</code></td><td>multi</td><td><span class="nsfw">nsfw</span></td></tr><tr><td>Hitomi.la</td><td><code>la.hitomi</code></td><td>multi</td><td><span class="nsfw">nsfw</span></td></tr><tr><td>MadaraDex</td><td><code>org.madaradex</code></td><td>en</td><td><span class="nsfw">nsfw</span></td></tr><tr><td>E-Hentai</td><td><code>org.ehentai</code></td><td>multi</td><td><span class="nsfw">nsfw</span></td></tr></tbody>
+  </table>
+  <details>
+    <summary>Declared hosts (11)</summary>
+    <ul class="hosts"><li>*.hath.network</li><li>*.hitomi.la</li><li>api.e-hentai.org</li><li>api.nhentai.net</li><li>cdn.madaradex.org</li><li>e-hentai.org</li><li>ehgt.org</li><li>hitomi.la</li><li>ltn.gold-usergeneratedcontent.net</li><li>madaradex.org</li><li>nhentai.net</li></ul>
+  </details>
+  <a class="download" href="extension_nsfw.wasm" download>Download extension_nsfw.wasm</a>
+</section>
+
+
+  <footer>
+    Machine-readable index:
+    <a href="index.min.json">index.min.json</a> &middot;
+    <a href="index.json">index.json</a><br>
+    Extensions run sandboxed and may only reach the hosts they declare above.
+  </footer>
+</main>
+<script>
+  const field = document.getElementById("url");
+  field.value = new URL("index.min.json", location.href).href;
+
+  document.getElementById("copy").addEventListener("click", async () => {
+    const button = document.getElementById("copy");
+    try {
+      await navigator.clipboard.writeText(field.value);
+    } catch {
+      field.select();
+      document.execCommand("copy");
+    }
+    button.textContent = "Copied";
+    setTimeout(() => { button.textContent = "Copy"; }, 1500);
+  });
+</script>
+</body>
+</html>
