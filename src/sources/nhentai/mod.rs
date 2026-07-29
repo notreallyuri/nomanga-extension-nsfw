@@ -107,7 +107,7 @@ impl Source for NHentaiSource {
         }
 
         let options = if all_tags.is_empty() {
-            opts(&["yuri", "romance", "comedy", "action", "sci-fi"])
+            opts(&[])
         } else {
             all_tags.sort_by(|a, b| a.name.cmp(&b.name));
             all_tags.dedup_by(|a, b| a.name == b.name);
