@@ -63,7 +63,7 @@ impl Source for MadaraDexSource {
             version: "1.0".to_owned(),
             language: "en".into(),
             base_url: BASE_URL.into(),
-            icon_url: None,
+            icon_url: Some(include_str!("../../../icons/madaradex.txt").into()),
             hosts: vec!["madaradex.org".into(), "cdn.madaradex.org".into()],
             nsfw: true,
         }

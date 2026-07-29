@@ -31,7 +31,7 @@ impl Source for NHentaiSource {
             version: "2.0".to_owned(),
             language: "multi".into(),
             base_url: "https://nhentai.net".into(),
-            icon_url: Some("https://nhentai.net/favicon.png".into()),
+            icon_url: Some(include_str!("../../../icons/nhentai.txt").into()),
             hosts: vec!["nhentai.net".into(), "api.nhentai.net".into()],
             nsfw: true,
         }

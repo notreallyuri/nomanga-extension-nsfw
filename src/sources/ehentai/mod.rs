@@ -162,7 +162,7 @@ impl Source for EHentaiSource {
             version: "1.0".to_owned(),
             language: "multi".into(),
             base_url: BASE_URL.into(),
-            icon_url: Some("https://e-hentai.org/favicon.ico".into()),
+            icon_url: Some(include_str!("../../../icons/ehentai.txt").into()),
             hosts: vec![
                 "e-hentai.org".into(),
                 "api.e-hentai.org".into(),

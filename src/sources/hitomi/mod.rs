@@ -34,7 +34,7 @@ impl Source for HitomiSource {
             version: "1.0".to_owned(),
             language: "multi".into(),
             base_url: BASE_URL.into(),
-            icon_url: Some(format!("{LTN_URL}/apple-touch-icon-180x180.png")),
+            icon_url: Some(include_str!("../../../icons/hitomi.txt").into()),
             hosts: vec![
                 "hitomi.la".into(),
                 "ltn.gold-usergeneratedcontent.net".into(),
