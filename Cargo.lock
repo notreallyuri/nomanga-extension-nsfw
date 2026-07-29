@@ -334,7 +334,7 @@ checksum = "650eef8c711430f1a879fdd01d4745a7deea475becfb90269c06775983bbf086"
 [[package]]
 name = "nomanga-core"
 version = "0.1.0"
-source = "git+file:///home/yuri/projects/nomanga?tag=sdk-v0.1.0#a26370a91e5885609f920a62f639d49184b9fd13"
+source = "git+https://github.com/notreallyuri/nomanga?tag=sdk-v0.1.0#a26370a91e5885609f920a62f639d49184b9fd13"
 dependencies = [
  "serde",
  "serde_json",
@@ -343,7 +343,7 @@ dependencies = [
 [[package]]
 name = "nomanga-sdk"
 version = "0.1.0"
-source = "git+file:///home/yuri/projects/nomanga?tag=sdk-v0.1.0#a26370a91e5885609f920a62f639d49184b9fd13"
+source = "git+https://github.com/notreallyuri/nomanga?tag=sdk-v0.1.0#a26370a91e5885609f920a62f639d49184b9fd13"
 dependencies = [
  "extism-pdk",
  "nomanga-core",
