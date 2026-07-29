@@ -8,6 +8,18 @@ Bundles four sources into one sandboxed WebAssembly plugin.
 Every source here is flagged `nsfw`, so the app hides them until adult sources
 are enabled.
 
+## Installing
+
+In nomanga, open Settings → Extensions and add this repository:
+
+```
+https://notreallyuri.github.io/nomanga-extension-nsfw/index.min.json
+```
+
+This pack lives in its own repository on purpose: nothing here is visible to
+anyone who has not added that URL. The pack then shows up under *Available*,
+with the domains it may reach listed before you confirm.
+
 ## Sources
 
 | Source | Id | Language |
@@ -59,8 +71,8 @@ cargo build --release
 `.cargo/config.toml` pins `wasm32-unknown-unknown`, so no `--target` is needed.
 If the toolchain is missing it: `rustup target add wasm32-unknown-unknown`.
 
-Install the resulting `.wasm` through the app's extension settings, or inspect it
-without the app using the CLI in the main repo:
+Install the resulting `.wasm` through Settings → Extensions → *Install from
+file…*, or inspect it without the app using the CLI in the main repo:
 
 ```sh
 cargo run -p nomanga-cli -- --wasm path/to/extension_nsfw.wasm info
