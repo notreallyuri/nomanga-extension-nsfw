@@ -32,8 +32,9 @@ rm -rf docs
 mkdir -p docs
 cp "$WASM" docs/
 
-# Pages runs Jekyll over the directory otherwise, which is only ever a way for
-# a file to go missing here.
+# Only honoured by the Pages "deploy from a branch" path, which runs Jekyll
+# over docs/ and fails anyway; .github/workflows/pages.yml uploads the
+# directory verbatim instead. Kept because it costs nothing.
 touch docs/.nojekyll
 
 nomanga-cli index \

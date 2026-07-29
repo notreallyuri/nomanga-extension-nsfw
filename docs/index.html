@@ -31,6 +31,11 @@ h1 { margin: 0 0 .25rem; font-size: 1.85rem; letter-spacing: -.02em; }
 .add h2 { margin: 0 0 .35rem; font-size: .8rem; text-transform: uppercase;
   letter-spacing: .06em; color: var(--muted); }
 .add p { margin: .6rem 0 0; font-size: .875rem; color: var(--muted); }
+.open {
+  display: inline-block; margin-bottom: .85rem; padding: .55rem 1.1rem;
+  background: var(--accent); color: #fff; border-radius: .5rem;
+  font-size: .875rem; font-weight: 600; text-decoration: none;
+}
 .row { display: flex; gap: .5rem; align-items: stretch; }
 #url {
   flex: 1; min-width: 0; padding: .6rem .7rem; border: 1px solid var(--line);
@@ -78,12 +83,15 @@ footer a { color: inherit; }
 
   <div class="add">
     <h2>Add this repository</h2>
+    <a class="open" id="open" href="#">Open in nomanga</a>
     <div class="row">
       <input id="url" readonly value="index.min.json">
       <button id="copy" type="button">Copy</button>
     </div>
-    <p>In nomanga, open Settings &rarr; Extensions and paste this into the
-    repository field.</p>
+    <p>The button hands this URL to nomanga, which asks you to confirm before
+    adding it &mdash; nothing installs on its own. If nothing happens, nomanga
+    is not installed or has not registered the <code>nomanga://</code> handler;
+    copy the URL into Settings &rarr; Extensions instead.</p>
   </div>
 
   <section class="ext">
@@ -113,6 +121,9 @@ footer a { color: inherit; }
 <script>
   const field = document.getElementById("url");
   field.value = new URL("index.min.json", location.href).href;
+
+  document.getElementById("open").href =
+    "nomanga://add-repo?url=" + encodeURIComponent(field.value);
 
   document.getElementById("copy").addEventListener("click", async () => {
     const button = document.getElementById("copy");
