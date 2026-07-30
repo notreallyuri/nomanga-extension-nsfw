@@ -132,7 +132,7 @@ checksum = "877a4ace8713b0bcf2a4e7eec82529c029f1d0619886d18145fea96c3ffe5c0f"
 
 [[package]]
 name = "extension_nsfw"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "extism-pdk",
  "nomanga-sdk",
@@ -334,7 +334,7 @@ checksum = "650eef8c711430f1a879fdd01d4745a7deea475becfb90269c06775983bbf086"
 [[package]]
 name = "nomanga-core"
 version = "0.1.0"
-source = "git+https://github.com/notreallyuri/nomanga?branch=main#a26370a91e5885609f920a62f639d49184b9fd13"
+source = "git+https://github.com/notreallyuri/nomanga?branch=main#d03a4d30153233399314716f1a092840e77989f1"
 dependencies = [
  "serde",
  "serde_json",
@@ -343,7 +343,7 @@ dependencies = [
 [[package]]
 name = "nomanga-sdk"
 version = "0.1.0"
-source = "git+https://github.com/notreallyuri/nomanga?branch=main#a26370a91e5885609f920a62f639d49184b9fd13"
+source = "git+https://github.com/notreallyuri/nomanga?branch=main#d03a4d30153233399314716f1a092840e77989f1"
 dependencies = [
  "extism-pdk",
  "nomanga-core",

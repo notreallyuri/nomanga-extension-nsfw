@@ -66,6 +66,7 @@ impl Source for MadaraDexSource {
             icon_url: Some(include_str!("../../../icons/madaradex.txt").into()),
             hosts: vec!["madaradex.org".into(), "cdn.madaradex.org".into()],
             nsfw: true,
+            challenge: None,
         }
     }
 

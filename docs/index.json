@@ -8,8 +8,8 @@
       "info": {
         "id": "dev.yuri.nsfwpack",
         "name": "NSFW Pack",
-        "version": "0.1.1",
-        "abi_version": 5,
+        "version": "0.1.2",
+        "abi_version": 6,
         "author": "Yuri",
         "website": null
       },
@@ -26,7 +26,8 @@
             "nhentai.net",
             "api.nhentai.net"
           ],
-          "nsfw": true
+          "nsfw": true,
+          "challenge": null
         },
         {
           "id": "la.hitomi",
@@ -40,7 +41,8 @@
             "ltn.gold-usergeneratedcontent.net",
             "*.hitomi.la"
           ],
-          "nsfw": true
+          "nsfw": true,
+          "challenge": null
         },
         {
           "id": "org.madaradex",
@@ -53,7 +55,8 @@
             "madaradex.org",
             "cdn.madaradex.org"
           ],
-          "nsfw": true
+          "nsfw": true,
+          "challenge": null
         },
         {
           "id": "org.ehentai",
@@ -68,7 +71,8 @@
             "ehgt.org",
             "*.hath.network"
           ],
-          "nsfw": true
+          "nsfw": true,
+          "challenge": null
         }
       ]
     }

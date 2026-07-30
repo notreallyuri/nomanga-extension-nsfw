@@ -34,6 +34,7 @@ impl Source for NHentaiSource {
             icon_url: Some(include_str!("../../../icons/nhentai.txt").into()),
             hosts: vec!["nhentai.net".into(), "api.nhentai.net".into()],
             nsfw: true,
+            challenge: None,
         }
     }
 

@@ -41,6 +41,7 @@ impl Source for HitomiSource {
                 "*.hitomi.la".into(),
             ],
             nsfw: true,
+            challenge: None,
         }
     }
 

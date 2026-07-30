@@ -171,6 +171,7 @@ impl Source for EHentaiSource {
                 "*.hath.network".into(),
             ],
             nsfw: true,
+            challenge: None,
         }
     }
 
