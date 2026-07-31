@@ -98,11 +98,18 @@ pub struct GalleryTitle {
 }
 
 impl GalleryTitle {
+    /// The API's own `pretty` when it has one. The raw fallbacks are put through
+    /// the same stripping the list endpoints need, so a gallery without a pretty
+    /// title still reads the same on its page as it did on the card.
     pub fn best_title(&self) -> String {
-        self.pretty
+        if let Some(pretty) = self.pretty.clone() {
+            return pretty;
+        }
+
+        self.english
             .clone()
-            .or_else(|| self.english.clone())
             .or_else(|| self.japanese.clone())
+            .map(|raw| super::util::pretty_title(&raw))
             .unwrap_or_else(|| "Untitled".to_owned())
     }
 }

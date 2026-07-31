@@ -12,6 +12,7 @@ use nomanga_sdk::{
         error::{SourceError, SourceResult},
         filter::{Filter, FilterValues},
         query::{ChapterRef, MangaPage, MangaRef, SearchQuery},
+        rate_limit::{RateLimit, SourceMethod},
         source::{Source, SourceInfo},
     },
     guest::{self, Request},
@@ -71,6 +72,43 @@ impl Source for NHentaiSource {
         Ok(MangaPage { has_next, items })
     }
 
+    // nhentai meters per endpoint, per IP, per minute, and an API key roughly
+    // doubles each ceiling. The host meters per source method instead, so every
+    // endpoint budget is split across the methods that spend it and divided by
+    // the calls each method makes:
+    //
+    //   GET /search          10/min anon, 20/min keyed
+    //     homepage  x5 calls -> 1 (5 req) keyed 2 (10 req)
+    //     search    x1 call  -> 3 (3 req) keyed 6 ( 6 req)
+    //     section   x1 call  -> 2 (2 req) keyed 4 ( 4 req)
+    //                          = 10 req             = 20 req
+    //
+    //   GET /galleries/{id}  20/min anon, 45/min keyed
+    //     manga     x1 call  -> 10        keyed 22
+    //     pages     x1 call  -> 10        keyed 22
+    //
+    // `chapters` is absent because it makes no request -- the gallery is a
+    // single oneshot synthesised from the id it was handed.
+    //
+    // Read at snapshot time the key always looks absent, since that plugin is
+    // built with no config at all, so an unconfigured host sees the anonymous
+    // numbers. That is the floor it wants: a configured instance re-reads this
+    // and only ever widens.
+    fn rate_limits(&self) -> Vec<RateLimit> {
+        let keyed = !guest::setting_or("api_key", "").is_empty();
+
+        let (homepage, search, section, gallery) =
+            if keyed { (2, 6, 4, 22) } else { (1, 3, 2, 10) };
+
+        vec![
+            RateLimit::per_minute(SourceMethod::Homepage, homepage),
+            RateLimit::per_minute(SourceMethod::Search, search),
+            RateLimit::per_minute(SourceMethod::Section, section),
+            RateLimit::per_minute(SourceMethod::Manga, gallery),
+            RateLimit::per_minute(SourceMethod::Pages, gallery),
+        ]
+    }
+
     fn settings(&self) -> Vec<Setting> {
         vec![
             Setting::select(
@@ -84,8 +122,11 @@ impl Source for NHentaiSource {
                 ]),
             )
             .with_description("Filter homepage and searches by this language."),
-            Setting::secret("api_key", "API Key")
-                .with_description("Optional API Key for V2 endpoints."),
+            Setting::secret("api_key", "API Key").with_description(
+                "Optional. Roughly doubles nhentai's per-minute request ceilings, \
+                 so browsing and searching throttle less. Create one under your \
+                 nhentai account settings.",
+            ),
             Setting::text("global_included", "Global Included Tags")
                 .with_description("Added to every search (e.g. \"big breasts\" sole female)"),
             Setting::text("global_excluded", "Global Excluded Tags")

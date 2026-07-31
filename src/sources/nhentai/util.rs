@@ -1,11 +1,9 @@
+use super::api::EndpointClass;
+use crate::sources::nhentai::api;
 use nomanga_sdk::{
     guest,
     prelude::{MangaSimple, SelectOption},
 };
-
-use crate::sources::nhentai::api;
-
-use super::api::EndpointClass;
 
 pub fn get_endpoint_rate_limit(endpoint: EndpointClass, authenticated: bool) -> u32 {
     match authenticated {
@@ -79,16 +77,84 @@ pub fn build_image_url(path: &str, is_thumb: bool) -> String {
     format!("{cdn}/{clean_path}")
 }
 
+/// Strips the bracketed metadata a raw nhentai title is wrapped in --
+/// `[Artist] Title (Convention) [English] {Decensored}` becomes `Title`.
+///
+/// The detail endpoint ships this form as `title.pretty`, but the list
+/// endpoints behind the homepage and search carry only the raw english and
+/// japanese strings, so a card would otherwise read differently from the page
+/// it opens. Reproduced here rather than fetched: asking the detail endpoint
+/// per card would be a request each, against a 20/min budget.
+///
+/// A title that is nothing but metadata keeps its raw form -- a blank card is
+/// worse than a noisy one.
+pub fn pretty_title(raw: &str) -> String {
+    let mut out = String::with_capacity(raw.len());
+    let mut depth = 0usize;
+
+    for ch in raw.chars() {
+        match ch {
+            '[' | '(' | '{' => depth += 1,
+            ']' | ')' | '}' => depth = depth.saturating_sub(1),
+            _ if depth == 0 => out.push(ch),
+            _ => {}
+        }
+    }
+
+    let collapsed = out.split_whitespace().collect::<Vec<_>>().join(" ");
+
+    if collapsed.is_empty() {
+        raw.trim().to_owned()
+    } else {
+        collapsed
+    }
+}
+
 pub fn map_galleries(items: Vec<api::V2GalleryListItem>) -> Vec<MangaSimple> {
     items
         .into_iter()
         .map(|g| MangaSimple {
             id: g.id.to_string(),
-            title: g.best_title(),
+            title: pretty_title(&g.best_title()),
             cover_url: build_image_url(&g.thumbnail, true),
             description: None,
         })
         .collect()
+}
+
+#[cfg(test)]
+mod tests {
+    use super::pretty_title;
+
+    #[test]
+    fn strips_the_metadata_around_a_title() {
+        assert_eq!(
+            pretty_title(
+                "[Yamada Gogogo] Erolibrary (COMIC Anthurium 2019-01) [English] {Hennojin}"
+            ),
+            "Erolibrary"
+        );
+        assert_eq!(
+            pretty_title("(C97) [Circle] Title Here [English]"),
+            "Title Here"
+        );
+    }
+
+    #[test]
+    fn leaves_a_bare_title_alone() {
+        assert_eq!(pretty_title("Just A Title"), "Just A Title");
+    }
+
+    #[test]
+    fn handles_nesting_and_strays() {
+        assert_eq!(pretty_title("[Artist [Circle]] Title"), "Title");
+        assert_eq!(pretty_title("Title] Extra"), "Title Extra");
+    }
+
+    #[test]
+    fn keeps_a_title_that_is_all_metadata() {
+        assert_eq!(pretty_title("[Artist Only]"), "[Artist Only]");
+    }
 }
 
 pub fn format_tag_type(tag_type: &str) -> String {
