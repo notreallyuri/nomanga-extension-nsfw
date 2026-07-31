@@ -137,7 +137,7 @@ impl Source for NHentaiSource {
     fn filters(&self) -> Vec<Filter> {
         let mut all_tags = Vec::new();
 
-        for page in 1..=4 {
+        for page in 1..=6 {
             let url = format!("{API_URL}/tags/tag?sort=popular&per_page=100&page={page}");
             if let Ok(res) = auth_request(&url).json::<api::V2TagListResponse>() {
                 if let Some(tags) = res.result {
