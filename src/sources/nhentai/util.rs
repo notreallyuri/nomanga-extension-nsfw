@@ -46,21 +46,6 @@ pub fn opts(labels: &[&str]) -> Vec<SelectOption> {
         .collect()
 }
 
-pub fn apply_language_preference(mut query: String) -> String {
-    let lang = guest::setting_or("language", "english");
-
-    if lang != "all" && !lang.is_empty() {
-        query.push_str(&format!(" \"{lang}\""));
-    }
-
-    let trimmed = query.trim();
-    if trimmed.is_empty() {
-        "\"\"".to_string()
-    } else {
-        trimmed.to_string()
-    }
-}
-
 pub fn build_image_url(path: &str, is_thumb: bool) -> String {
     if path.starts_with("http") {
         return path.to_owned();

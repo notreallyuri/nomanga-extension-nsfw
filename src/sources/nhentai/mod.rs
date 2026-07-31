@@ -269,7 +269,7 @@ impl Source for NHentaiSource {
             }
         }
 
-        final_query = util::apply_language_preference(final_query);
+        final_query = util::apply_global_query_settings(final_query);
         let search_str = encode_query(&final_query);
 
         let url = format!("{API_URL}/search?query={}&page={}", search_str, query.page);
